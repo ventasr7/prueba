@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inmobiliaria JL</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+    header {
+      background-color: #16162E;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+    header img {
+      max-height: 90px;
+    }
+    header h1 {
+      margin: 10px 0 5px;
+    }
+    header p {
+      margin: 0;
+      font-size: 1.1em;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    .filter-bar {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .filter-bar select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .property {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .property:hover {
+      transform: translateY(-5px);
+    }
+    .property img.main-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    .property-content {
+      padding: 15px;
+    }
+    .property-content h2 {
+      margin: 0 0 10px;
+      font-size: 1.4em;
+    }
+    .property-content p {
+      margin: 5px 0;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #28a745;
+      color: white;
+      padding: 10px 15px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #218838;
+    }
+    .thumbnail-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .thumbnail {
+      width: 60px;
+      height: 60px;
+      overflow: hidden;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="IMG_6190.PNG" alt="Logo">
+    <h1>JL INMOBILIARIA</h1>
+    <p>Tu hogar ideal te espera</p>
+  </header>
+
+  <div class="container">
+    <div class="filter-bar">
+      <label for="property-type">Filtrar por tipo: </label>
+      <select id="property-type" onchange="filterProperties()">
+        <option value="todas">Todas</option>
+        <option value="casa">Casas</option>
+        <option value="apartamento">Apartamentos</option>
+        <option value="solar">Solares</option>
+        <option value="renta">Rentas</option>
+      </select>
+    </div>
+
+    <div class="property-grid" id="properties">
+
+      <!-- CASA -->
+      <div class="property casa">
+        <img src="1.avif" alt="Casa Familiar" class="main-image" onclick="openModal(['1.avif', '1.avif'])">
+        <div class="property-content">
+          <h2>Casa Familiar</h2>
+          <p><strong>Precio:</strong> $150,000</p>
+          <p>3 habitaciones, 2 baños, jardín amplio.</p>
+          <div class="thumbnail-container">
+            <div class="thumbnail" onclick="openModal(['1.avif', '1.avif'], 0)"><img src="1.avif"></div>
+            <div class="thumbnail" onclick="openModal(['2.webp', '2.webp'], 1)"><img src="2.webp"></div>
+          </div>
+          <button class="btn">Comprar</button>
+        </div>
+      </div>
+
+      <!-- SOLAR -->
+      <div class="property solar">
+        <img src="solar1.jpg" alt="Solar en las Afueras" class="main-image" onclick="openModal(['solar1.jpg', 'solar2.jpg'])">
+        <div class="property-content">
+          <h2>Solar en las Afueras</h2>
+          <p><strong>Precio:</strong> $60,000</p>
+          <p>Terreno de 1000 m² ideal para construcción residencial.</p>
+          <div class="thumbnail-container">
+            <div class="thumbnail" onclick="openModal(['solar1.jpg', 'solar2.jpg'], 0)"><img src="solar1.jpg"></div>
+            <div class="thumbnail" onclick="openModal(['solar1.jpg', 'solar2.jpg'], 1)"><img src="solar2.jpg"></div>
+          </div>
+          <button class="btn">Comprar</button>
+        </div>
+      </div>
+
+      <!-- APARTAMENTO -->
+      <div class="property apartamento">
+        <img src="apartamento1.jpg" alt="Apartamento Moderno" class="main-image" onclick="openModal(['apartamento1.jpg', 'apartamento2.jpg'])">
+        <div class="property-content">
+          <h2>Apartamento Moderno</h2>
+          <p><strong>Precio:</strong> $120,000</p>
+          <p>2 habitaciones, 2 baños, parqueo privado, seguridad 24/7.</p>
+          <div class="thumbnail-container">
+            <div class="thumbnail" onclick="openModal(['apartamento1.jpg', 'apartamento2.jpg'], 0)"><img src="apartamento1.jpg"></div>
+            <div class="thumbnail" onclick="openModal(['apartamento1.jpg', 'apartamento2.jpg'], 1)"><img src="apartamento2.jpg"></div>
+          </div>
+          <button class="btn">Comprar</button>
+        </div>
+      </div>
+
+      <!-- RENTA -->
+      <div class="property renta">
+        <img src="renta1.jpg" alt="Apartamento en Alquiler" class="main-image" onclick="openModal(['renta1.jpg', 'renta2.jpg'])">
+        <div class="property-content">
+          <h2>Apartamento en Alquiler</h2>
+          <p><strong>Precio:</strong> $800 / mes</p>
+          <p>2 habitaciones, amueblado, buena ubicación.</p>
+          <div class="thumbnail-container">
+            <div class="thumbnail" onclick="openModal(['renta1.jpg', 'renta2.jpg'], 0)"><img src="renta1.jpg"></div>
+            <div class="thumbnail" onclick="openModal(['renta1.jpg', 'renta2.jpg'], 1)"><img src="renta2.jpg"></div>
+          </div>
+          <button class="btn">Alquilar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="modal" class="modal" onclick="closeModal()">
+    <img id="modal-img" src="" alt="Imagen ampliada">
+  </div>
+
+  <script>
+    function openModal(images, index = 0) {
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modal-img");
+      modal.style.display = "flex";
+      modalImg.src = images[index];
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function filterProperties() {
+      const selected = document.getElementById("property-type").value;
+      const all = document.querySelectorAll(".property");
+      all.forEach(el => {
+        el.style.display = selected === "todas" || el.classList.contains(selected) ? "block" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
