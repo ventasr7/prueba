@@ -39,6 +39,7 @@
             border: 1px solid #d1d5db;
             border-radius: 4px;
             text-align: right;
+            background-color: #fff;
         }
         .editable-text:hover {
             background-color: #fef9c3;
@@ -72,7 +73,7 @@
 <body class="p-4 md:p-8">
 
     <div class="max-w-5xl mx-auto">
-        <h1 contenteditable="true" id="main-title" class="editable-text text-2xl font-bold text-center mb-8 text-blue-900 border-b-2 border-blue-900 pb-2 uppercase">
+        <h1 contenteditable="true" id="main-title" onblur="saveState()" class="editable-text text-2xl font-bold text-center mb-8 text-blue-900 border-b-2 border-blue-900 pb-2 uppercase">
             HOJA DE CONTROL DE PRODUCCIÓN Y REPROCESO
         </h1>
 
@@ -84,62 +85,62 @@
                     <thead>
                         <tr>
                             <th class="text-left" style="width: 50px;">#</th>
-                            <th contenteditable="true" class="editable-text text-left">INVENTARIOS REPROCESO</th>
+                            <th contenteditable="true" onblur="saveState()" class="editable-text text-left">INVENTARIOS REPROCESO</th>
                             <th style="width: 150px;">1</th>
                             <th style="width: 150px;">2</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td class="font-bold">1</td><td contenteditable="true" class="editable-text">REPROCESO EN SILOS</td><td><input type="number" class="col-1" oninput="calculateTotal(1)"></td><td><input type="number" class="col-2" oninput="calculateTotal(1)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">REPROCESO EN PISO</td><td><input type="number" class="col-1" oninput="calculateTotal(1)"></td><td><input type="number" class="col-2" oninput="calculateTotal(1)"></td></tr>
+                        <tr><td class="font-bold">1</td><td contenteditable="true" onblur="saveState()" class="editable-text">REPROCESO EN SILOS</td><td><input type="number" class="col-1 data-input" data-id="r1-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="r1-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">REPROCESO EN PISO</td><td><input type="number" class="col-1 data-input" data-id="r2-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="r2-c2" oninput="updateCalculations()"></td></tr>
                         <tr class="total-row"><td></td><td class="text-right">TOTAL REPROCESO:</td><td class="total-display" id="total-1-1">0</td><td class="total-display" id="total-1-2">0</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- 2. GENERACION -->
-            <span contenteditable="true" id="note-2" class="handwritten-note editable-text">Desperdicio de cada línea</span>
+            <span contenteditable="true" id="note-2" onblur="saveState()" class="handwritten-note editable-text">Desperdicio de cada línea</span>
             <div class="table-container">
                 <table id="table-2">
                     <thead>
                         <tr>
                             <th class="text-left" style="width: 50px;">#</th>
-                            <th contenteditable="true" class="editable-text text-left">GENERACIÓN</th>
+                            <th contenteditable="true" onblur="saveState()" class="editable-text text-left">GENERACIÓN</th>
                             <th style="width: 150px;">1</th>
                             <th style="width: 150px;">2</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td class="font-bold">2</td><td contenteditable="true" class="editable-text">LINEA LARGAS 2400</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO NUEVA</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 01</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 02</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA LARGAS 1700</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO MADRIGAL</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr><td class="font-bold">2</td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA LARGAS 2400</td><td><input type="number" class="col-1 data-input" data-id="g1-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="g1-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA FIDEO NUEVA</td><td><input type="number" class="col-1 data-input" data-id="g2-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="g2-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA PASTA CORTA 01</td><td><input type="number" class="col-1 data-input" data-id="g3-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="g3-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA PASTA CORTA 02</td><td><input type="number" class="col-1 data-input" data-id="g4-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="g4-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA LARGAS 1700</td><td><input type="number" class="col-1 data-input" data-id="g5-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="g5-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA FIDEO MADRIGAL</td><td><input type="number" class="col-1 data-input" data-id="g6-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="g6-c2" oninput="updateCalculations()"></td></tr>
                         <tr class="total-row"><td></td><td class="text-right">ACUMULADO DEL DIA (kgs):</td><td class="total-display" id="total-2-1">0</td><td class="total-display" id="total-2-2">0</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- 3. CONSUMO DIARIO -->
-            <span contenteditable="true" id="note-3" class="handwritten-note editable-text">CANTIDAD DE HARINA QUE SE MANDÓ A CADA LÍNEA</span>
+            <span contenteditable="true" id="note-3" onblur="saveState()" class="handwritten-note editable-text">CANTIDAD DE HARINA QUE SE MANDÓ A CADA LÍNEA</span>
             <div class="table-container">
                 <table id="table-3">
                     <thead>
                         <tr>
                             <th class="text-left" style="width: 50px;">#</th>
-                            <th contenteditable="true" class="editable-text text-left">CONSUMO DIARIO</th>
+                            <th contenteditable="true" onblur="saveState()" class="editable-text text-left">CONSUMO DIARIO</th>
                             <th style="width: 150px;">1</th>
                             <th style="width: 150px;">2</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td class="font-bold">3</td><td contenteditable="true" class="editable-text">LINEA LARGAS 2400</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO NUEVA</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 01</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 02</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA LARGAS 1700</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO MADRIGAL</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr><td class="font-bold">3</td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA LARGAS 2400</td><td><input type="number" class="col-1 data-input" data-id="h1-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="h1-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA FIDEO NUEVA</td><td><input type="number" class="col-1 data-input" data-id="h2-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="h2-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA PASTA CORTA 01</td><td><input type="number" class="col-1 data-input" data-id="h3-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-id" data-id="h3-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA PASTA CORTA 02</td><td><input type="number" class="col-1 data-input" data-id="h4-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="h4-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA LARGAS 1700</td><td><input type="number" class="col-1 data-input" data-id="h5-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="h5-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">LINEA FIDEO MADRIGAL</td><td><input type="number" class="col-1 data-input" data-id="h6-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="h6-c2" oninput="updateCalculations()"></td></tr>
                         <tr class="total-row"><td></td><td class="text-right">ACUMULADO DEL DIA (kgs):</td><td class="total-display" id="total-3-1">0</td><td class="total-display" id="total-3-2">0</td></tr>
                     </tbody>
                 </table>
@@ -151,15 +152,15 @@
                     <thead>
                         <tr>
                             <th class="text-left" style="width: 50px;">#</th>
-                            <th contenteditable="true" class="editable-text text-left">MOLIENDA</th>
+                            <th contenteditable="true" onblur="saveState()" class="editable-text text-left">MOLIENDA</th>
                             <th style="width: 150px;">1</th>
                             <th style="width: 150px;">2</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td class="font-bold">4</td><td contenteditable="true" class="editable-text">PRIMER TURNO:</td><td><input type="number" class="col-1" oninput="calculateTotal(4)"></td><td><input type="number" class="col-2" oninput="calculateTotal(4)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">SEGUNDO TURNO:</td><td><input type="number" class="col-1" oninput="calculateTotal(4)"></td><td><input type="number" class="col-2" oninput="calculateTotal(4)"></td></tr>
-                        <tr><td></td><td contenteditable="true" class="editable-text">TERCER TURNO:</td><td><input type="number" class="col-1" oninput="calculateTotal(4)"></td><td><input type="number" class="col-2" oninput="calculateTotal(4)"></td></tr>
+                        <tr><td class="font-bold">4</td><td contenteditable="true" onblur="saveState()" class="editable-text">PRIMER TURNO:</td><td><input type="number" class="col-1 data-input" data-id="m1-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="m1-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">SEGUNDO TURNO:</td><td><input type="number" class="col-1 data-input" data-id="m2-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="m2-c2" oninput="updateCalculations()"></td></tr>
+                        <tr><td></td><td contenteditable="true" onblur="saveState()" class="editable-text">TERCER TURNO:</td><td><input type="number" class="col-1 data-input" data-id="m3-c1" oninput="updateCalculations()"></td><td><input type="number" class="col-2 data-input" data-id="m3-c2" oninput="updateCalculations()"></td></tr>
                         <tr class="total-row"><td></td><td class="text-right">TOTAL MOLIENDA (kgs):</td><td class="total-display" id="total-4-1">0</td><td class="total-display" id="total-4-2">0</td></tr>
                     </tbody>
                 </table>
@@ -168,8 +169,8 @@
 
         <!-- CONTROLES -->
         <div class="flex flex-wrap justify-center gap-4 mb-10 print:hidden">
-            <button onclick="saveEntry()" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700 transition flex items-center gap-2">
-                <span>💾</span> Guardar Registro
+            <button onclick="saveToHistory()" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700 transition flex items-center gap-2">
+                <span>💾</span> Guardar en Historial
             </button>
             <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition flex items-center gap-2">
                 <span>🖨️</span> Imprimir / PDF
@@ -182,7 +183,7 @@
         <!-- HISTORIAL -->
         <div class="print:hidden">
             <div class="flex justify-between items-center mb-4 border-b-2 border-gray-300 pb-2">
-                <h2 class="text-xl font-bold text-gray-700">Historial de Registros Guardados</h2>
+                <h2 class="text-xl font-bold text-gray-700">Historial de Registros</h2>
                 <button onclick="downloadCSV()" class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 transition">
                     📥 Descargar Excel (CSV)
                 </button>
@@ -192,38 +193,87 @@
                     <thead>
                         <tr class="bg-gray-100">
                             <th class="text-left text-gray-700">Fecha/Hora</th>
-                            <th class="text-left text-gray-700">Resumen Totales</th>
+                            <th class="text-left text-gray-700">Resumen de Totales Guardados</th>
                             <th class="text-center text-gray-700" style="width: 100px;">Acción</th>
                         </tr>
                     </thead>
-                    <tbody id="history-body">
-                        <!-- Las entradas se cargan aquí -->
-                    </tbody>
+                    <tbody id="history-body"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Cargar historial al iniciar
-        window.onload = loadHistory;
+        // Al iniciar, cargar todo el estado
+        window.onload = function() {
+            loadState();
+            renderHistory();
+        };
 
-        function calculateTotal(tableId) {
-            const table = document.getElementById(`table-${tableId}`);
-            const sums = [0, 0];
-            [1, 2].forEach(colNum => {
-                table.querySelectorAll(`.col-${colNum}`).forEach(input => {
-                    sums[colNum-1] += parseFloat(input.value) || 0;
+        // Calcula totales y guarda el estado actual automáticamente
+        function updateCalculations() {
+            for(let i=1; i<=4; i++) {
+                const table = document.getElementById(`table-${i}`);
+                [1, 2].forEach(colNum => {
+                    const inputs = table.querySelectorAll(`.col-${colNum}`);
+                    let sum = 0;
+                    inputs.forEach(input => sum += parseFloat(input.value) || 0);
+                    document.getElementById(`total-${i}-${colNum}`).innerText = sum.toLocaleString();
                 });
-                document.getElementById(`total-${tableId}-${colNum}`).innerText = sums[colNum-1].toLocaleString();
-            });
+            }
+            saveState();
         }
 
-        function saveEntry() {
+        // Guarda el contenido de inputs y textos editables en LocalStorage
+        function saveState() {
+            const state = {
+                inputs: {},
+                texts: {}
+            };
+            
+            // Guardar inputs de números
+            document.querySelectorAll('.data-input').forEach(input => {
+                state.inputs[input.dataset.id] = input.value;
+            });
+
+            // Guardar todos los textos editables (incluyendo títulos y notas)
+            document.querySelectorAll('.editable-text').forEach((el, index) => {
+                state.texts[index] = el.innerText;
+            });
+
+            localStorage.setItem('produccion_current_state', JSON.stringify(state));
+        }
+
+        // Recupera el contenido guardado al recargar
+        function loadState() {
+            const saved = localStorage.getItem('produccion_current_state');
+            if (!saved) return;
+            
+            const state = JSON.parse(saved);
+            
+            // Restaurar inputs
+            document.querySelectorAll('.data-input').forEach(input => {
+                if(state.inputs[input.dataset.id]) {
+                    input.value = state.inputs[input.dataset.id];
+                }
+            });
+
+            // Restaurar textos editables
+            document.querySelectorAll('.editable-text').forEach((el, index) => {
+                if(state.texts[index]) {
+                    el.innerText = state.texts[index];
+                }
+            });
+
+            // Forzar recálculo de totales visuales
+            updateCalculations();
+        }
+
+        // Guarda una copia en el historial sin borrar la tabla actual
+        function saveToHistory() {
             const data = {
                 id: Date.now(),
                 timestamp: new Date().toLocaleString(),
-                title: document.getElementById('main-title').innerText,
                 totals: {
                     t1: [document.getElementById('total-1-1').innerText, document.getElementById('total-1-2').innerText],
                     t2: [document.getElementById('total-2-1').innerText, document.getElementById('total-2-2').innerText],
@@ -237,11 +287,7 @@
             localStorage.setItem('produccion_history', JSON.stringify(history));
             
             renderHistory();
-            alert('Registro guardado exitosamente en el historial.');
-        }
-
-        function loadHistory() {
-            renderHistory();
+            alert('Copia guardada en el historial. Los datos actuales se mantienen en la tabla.');
         }
 
         function renderHistory() {
@@ -250,7 +296,7 @@
             body.innerHTML = '';
 
             if (history.length === 0) {
-                body.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-4">No hay registros guardados.</td></tr>';
+                body.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-4">No hay registros en el historial.</td></tr>';
                 return;
             }
 
@@ -258,22 +304,19 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td class="text-sm">${entry.timestamp}</td>
-                    <td class="text-xs text-gray-600">
-                        <b>Reproceso:</b> ${entry.totals.t1.join('/')} | 
-                        <b>Desperdicio:</b> ${entry.totals.t2.join('/')} | 
-                        <b>Harina:</b> ${entry.totals.t3.join('/')} | 
-                        <b>Molienda:</b> ${entry.totals.t4.join('/')}
+                    <td class="text-xs text-gray-600 italic">
+                        Rep: ${entry.totals.t1.join('/')} | Desp: ${entry.totals.t2.join('/')} | Har: ${entry.totals.t3.join('/')} | Mol: ${entry.totals.t4.join('/')}
                     </td>
                     <td class="text-center">
-                        <button onclick="deleteEntry(${entry.id})" class="text-red-500 hover:text-red-700 font-bold">Eliminar</button>
+                        <button onclick="deleteHistoryEntry(${entry.id})" class="text-red-500 hover:text-red-700">Eliminar</button>
                     </td>
                 `;
                 body.appendChild(row);
             });
         }
 
-        function deleteEntry(id) {
-            if(confirm('¿Eliminar este registro del historial?')) {
+        function deleteHistoryEntry(id) {
+            if(confirm('¿Eliminar esta entrada del historial?')) {
                 let history = JSON.parse(localStorage.getItem('produccion_history') || '[]');
                 history = history.filter(e => e.id !== id);
                 localStorage.setItem('produccion_history', JSON.stringify(history));
@@ -282,31 +325,27 @@
         }
 
         function clearCurrentData() {
-            if(confirm('¿Limpiar los datos de la tabla actual? El historial no se verá afectado.')) {
-                document.querySelectorAll('input').forEach(i => i.value = '');
-                document.querySelectorAll('.total-display').forEach(d => d.innerText = '0');
+            if(confirm('ATENCIÓN: Se borrarán todos los datos de la tabla actual. ¿Continuar?')) {
+                document.querySelectorAll('.data-input').forEach(i => i.value = '');
+                updateCalculations();
+                saveState(); // Guardar el estado vacío
             }
         }
 
         function downloadCSV() {
             const history = JSON.parse(localStorage.getItem('produccion_history') || '[]');
-            if (history.length === 0) return alert('No hay datos para descargar');
+            if (history.length === 0) return alert('No hay datos históricos para descargar');
 
-            let csv = 'Fecha/Hora,Total Reproceso 1,Total Reproceso 2,Acum Generacion 1,Acum Generacion 2,Acum Harina 1,Acum Harina 2,Total Molienda 1,Total Molienda 2\n';
-            
+            let csv = 'Fecha,Reproceso 1,Reproceso 2,Desperdicio 1,Desperdicio 2,Harina 1,Harina 2,Molienda 1,Molienda 2\n';
             history.forEach(e => {
                 csv += `"${e.timestamp}",${e.totals.t1[0]},${e.totals.t1[1]},${e.totals.t2[0]},${e.totals.t2[1]},${e.totals.t3[0]},${e.totals.t3[1]},${e.totals.t4[0]},${e.totals.t4[1]}\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "historial_produccion.csv");
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
+            link.href = URL.createObjectURL(blob);
+            link.download = "registro_produccion.csv";
             link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>
