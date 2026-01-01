@@ -1,238 +1,315 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inmobiliaria JL</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f7fa;
-      color: #333;
-    }
-    header {
-      background-color: #16162E;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
-    header img {
-      max-height: 90px;
-    }
-    header h1 {
-      margin: 10px 0 5px;
-    }
-    header p {
-      margin: 0;
-      font-size: 1.1em;
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
-    .filter-bar {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .filter-bar select {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .property-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .property {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-    .property:hover {
-      transform: translateY(-5px);
-    }
-    .property img.main-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      cursor: pointer;
-    }
-    .property-content {
-      padding: 15px;
-    }
-    .property-content h2 {
-      margin: 0 0 10px;
-      font-size: 1.4em;
-    }
-    .property-content p {
-      margin: 5px 0;
-    }
-    .btn {
-      display: inline-block;
-      background-color: #28a745;
-      color: white;
-      padding: 10px 15px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
-    .btn:hover {
-      background-color: #218838;
-    }
-    .thumbnail-container {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    .thumbnail {
-      width: 60px;
-      height: 60px;
-      overflow: hidden;
-      border-radius: 5px;
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
-    .thumbnail img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.9);
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    .modal img {
-      max-width: 90%;
-      max-height: 90%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Inventarios y Producción</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background-color: #1e40af;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.875rem;
+            padding: 12px;
+        }
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            text-align: right;
+        }
+        .editable-text:hover {
+            background-color: #fef9c3;
+            cursor: pointer;
+        }
+        .total-row {
+            background-color: #eff6ff;
+            font-weight: bold;
+        }
+        .handwritten-note {
+            font-style: italic;
+            color: #b91c1c;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            border-bottom: 1px dashed #f87171;
+            width: fit-content;
+        }
+        .total-display {
+            font-weight: bold;
+            text-align: right;
+            color: #1e40af;
+        }
+        @media print {
+            .print\:hidden { display: none; }
+            body { background-color: white; }
+            .table-container { box-shadow: none; border: 1px solid #ccc; }
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <img src="foto/IMG_6190.PNG" alt="Logo">
-    <h1>JL INMOBILIARIA</h1>
-    <p>Tu hogar ideal te espera</p>
-  </header>
+<body class="p-4 md:p-8">
 
-  <div class="container">
-    <div class="filter-bar">
-      <label for="property-type">Filtrar por tipo: </label>
-      <select id="property-type" onchange="filterProperties()">
-        <option value="todas">Todas</option>
-        <option value="casa">Casas</option>
-        <option value="apartamento">Apartamentos</option>
-        <option value="solar">Solares</option>
-        <option value="renta">Rentas</option>
-      </select>
+    <div class="max-w-5xl mx-auto">
+        <h1 contenteditable="true" id="main-title" class="editable-text text-2xl font-bold text-center mb-8 text-blue-900 border-b-2 border-blue-900 pb-2 uppercase">
+            HOJA DE CONTROL DE PRODUCCIÓN Y REPROCESO
+        </h1>
+
+        <!-- TABLAS PRINCIPALES -->
+        <div id="capture-area">
+            <!-- 1. INVENTARIOS REPROCESO -->
+            <div class="table-container">
+                <table id="table-1">
+                    <thead>
+                        <tr>
+                            <th class="text-left" style="width: 50px;">#</th>
+                            <th contenteditable="true" class="editable-text text-left">INVENTARIOS REPROCESO</th>
+                            <th style="width: 150px;">1</th>
+                            <th style="width: 150px;">2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="font-bold">1</td><td contenteditable="true" class="editable-text">REPROCESO EN SILOS</td><td><input type="number" class="col-1" oninput="calculateTotal(1)"></td><td><input type="number" class="col-2" oninput="calculateTotal(1)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">REPROCESO EN PISO</td><td><input type="number" class="col-1" oninput="calculateTotal(1)"></td><td><input type="number" class="col-2" oninput="calculateTotal(1)"></td></tr>
+                        <tr class="total-row"><td></td><td class="text-right">TOTAL REPROCESO:</td><td class="total-display" id="total-1-1">0</td><td class="total-display" id="total-1-2">0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. GENERACION -->
+            <span contenteditable="true" id="note-2" class="handwritten-note editable-text">Desperdicio de cada línea</span>
+            <div class="table-container">
+                <table id="table-2">
+                    <thead>
+                        <tr>
+                            <th class="text-left" style="width: 50px;">#</th>
+                            <th contenteditable="true" class="editable-text text-left">GENERACIÓN</th>
+                            <th style="width: 150px;">1</th>
+                            <th style="width: 150px;">2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="font-bold">2</td><td contenteditable="true" class="editable-text">LINEA LARGAS 2400</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO NUEVA</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 01</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 02</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA LARGAS 1700</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO MADRIGAL</td><td><input type="number" class="col-1" oninput="calculateTotal(2)"></td><td><input type="number" class="col-2" oninput="calculateTotal(2)"></td></tr>
+                        <tr class="total-row"><td></td><td class="text-right">ACUMULADO DEL DIA (kgs):</td><td class="total-display" id="total-2-1">0</td><td class="total-display" id="total-2-2">0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 3. CONSUMO DIARIO -->
+            <span contenteditable="true" id="note-3" class="handwritten-note editable-text">CANTIDAD DE HARINA QUE SE MANDÓ A CADA LÍNEA</span>
+            <div class="table-container">
+                <table id="table-3">
+                    <thead>
+                        <tr>
+                            <th class="text-left" style="width: 50px;">#</th>
+                            <th contenteditable="true" class="editable-text text-left">CONSUMO DIARIO</th>
+                            <th style="width: 150px;">1</th>
+                            <th style="width: 150px;">2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="font-bold">3</td><td contenteditable="true" class="editable-text">LINEA LARGAS 2400</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO NUEVA</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 01</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA PASTA CORTA 02</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA LARGAS 1700</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">LINEA FIDEO MADRIGAL</td><td><input type="number" class="col-1" oninput="calculateTotal(3)"></td><td><input type="number" class="col-2" oninput="calculateTotal(3)"></td></tr>
+                        <tr class="total-row"><td></td><td class="text-right">ACUMULADO DEL DIA (kgs):</td><td class="total-display" id="total-3-1">0</td><td class="total-display" id="total-3-2">0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 4. MOLIENDA -->
+            <div class="table-container">
+                <table id="table-4">
+                    <thead>
+                        <tr>
+                            <th class="text-left" style="width: 50px;">#</th>
+                            <th contenteditable="true" class="editable-text text-left">MOLIENDA</th>
+                            <th style="width: 150px;">1</th>
+                            <th style="width: 150px;">2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="font-bold">4</td><td contenteditable="true" class="editable-text">PRIMER TURNO:</td><td><input type="number" class="col-1" oninput="calculateTotal(4)"></td><td><input type="number" class="col-2" oninput="calculateTotal(4)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">SEGUNDO TURNO:</td><td><input type="number" class="col-1" oninput="calculateTotal(4)"></td><td><input type="number" class="col-2" oninput="calculateTotal(4)"></td></tr>
+                        <tr><td></td><td contenteditable="true" class="editable-text">TERCER TURNO:</td><td><input type="number" class="col-1" oninput="calculateTotal(4)"></td><td><input type="number" class="col-2" oninput="calculateTotal(4)"></td></tr>
+                        <tr class="total-row"><td></td><td class="text-right">TOTAL MOLIENDA (kgs):</td><td class="total-display" id="total-4-1">0</td><td class="total-display" id="total-4-2">0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CONTROLES -->
+        <div class="flex flex-wrap justify-center gap-4 mb-10 print:hidden">
+            <button onclick="saveEntry()" class="bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700 transition flex items-center gap-2">
+                <span>💾</span> Guardar Registro
+            </button>
+            <button onclick="window.print()" class="bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition flex items-center gap-2">
+                <span>🖨️</span> Imprimir / PDF
+            </button>
+            <button onclick="clearCurrentData()" class="bg-gray-500 text-white px-6 py-2 rounded shadow hover:bg-gray-600 transition flex items-center gap-2">
+                <span>🧹</span> Limpiar Tabla
+            </button>
+        </div>
+
+        <!-- HISTORIAL -->
+        <div class="print:hidden">
+            <div class="flex justify-between items-center mb-4 border-b-2 border-gray-300 pb-2">
+                <h2 class="text-xl font-bold text-gray-700">Historial de Registros Guardados</h2>
+                <button onclick="downloadCSV()" class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded hover:bg-blue-200 transition">
+                    📥 Descargar Excel (CSV)
+                </button>
+            </div>
+            <div class="table-container">
+                <table id="history-table">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="text-left text-gray-700">Fecha/Hora</th>
+                            <th class="text-left text-gray-700">Resumen Totales</th>
+                            <th class="text-center text-gray-700" style="width: 100px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- Las entradas se cargan aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="property-grid" id="properties">
+    <script>
+        // Cargar historial al iniciar
+        window.onload = loadHistory;
 
-      <!-- CASA -->
-      <div class="property casa">
-        <img src="foto/1.avif" alt="Casa Familiar" class="main-image" onclick="openModal(['foto/1.avif', 'foto/1.avif'])">
-        <div class="property-content">
-          <h2>Casa Familiar</h2>
-          <p><strong>Precio:</strong> $150,000</p>
-          <p>3 habitaciones, 2 baños, jardín amplio.</p>
-          <div class="thumbnail-container">
-            <div class="thumbnail" onclick="openModal(['foto/1.avif', 'foto/1.avif'], 0)"><img src="foto/1.avif"></div>
-           <div class="thumbnail" onclick="openModal(['foto/2.webp', 'foto/2.webp'], 1)"><img src="foto/2.webp"></div>
-            <div class="thumbnail" onclick="openModal(['foto/2.webp', 'foto/2.webp'], 1)"><img src="foto/2.webp"></div>
-          </div>
-          <button class="btn">Comprar</button>
-        </div>
-      </div>
+        function calculateTotal(tableId) {
+            const table = document.getElementById(`table-${tableId}`);
+            const sums = [0, 0];
+            [1, 2].forEach(colNum => {
+                table.querySelectorAll(`.col-${colNum}`).forEach(input => {
+                    sums[colNum-1] += parseFloat(input.value) || 0;
+                });
+                document.getElementById(`total-${tableId}-${colNum}`).innerText = sums[colNum-1].toLocaleString();
+            });
+        }
 
-      <!-- SOLAR -->
-      <div class="property solar">
-        <img src="solar1.jpg" alt="Solar en las Afueras" class="main-image" onclick="openModal(['solar1.jpg', 'solar2.jpg'])">
-        <div class="property-content">
-          <h2>Solar en las Afueras</h2>
-          <p><strong>Precio:</strong> $60,000</p>
-          <p>Terreno de 1000 m² ideal para construcción residencial.</p>
-          <div class="thumbnail-container">
-            <div class="thumbnail" onclick="openModal(['solar1.jpg', 'solar2.jpg'], 0)"><img src="solar1.jpg"></div>
-            <div class="thumbnail" onclick="openModal(['solar1.jpg', 'solar2.jpg'], 1)"><img src="solar2.jpg"></div>
-          </div>
-          <button class="btn">Comprar</button>
-        </div>
-      </div>
+        function saveEntry() {
+            const data = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString(),
+                title: document.getElementById('main-title').innerText,
+                totals: {
+                    t1: [document.getElementById('total-1-1').innerText, document.getElementById('total-1-2').innerText],
+                    t2: [document.getElementById('total-2-1').innerText, document.getElementById('total-2-2').innerText],
+                    t3: [document.getElementById('total-3-1').innerText, document.getElementById('total-3-2').innerText],
+                    t4: [document.getElementById('total-4-1').innerText, document.getElementById('total-4-2').innerText]
+                }
+            };
 
-      <!-- APARTAMENTO -->
-      <div class="property apartamento">
-        <img src="apartamento1.jpg" alt="Apartamento Moderno" class="main-image" onclick="openModal(['apartamento1.jpg', 'apartamento2.jpg'])">
-        <div class="property-content">
-          <h2>Apartamento Moderno</h2>
-          <p><strong>Precio:</strong> $120,000</p>
-          <p>2 habitaciones, 2 baños, parqueo privado, seguridad 24/7.</p>
-          <div class="thumbnail-container">
-            <div class="thumbnail" onclick="openModal(['apartamento1.jpg', 'apartamento2.jpg'], 0)"><img src="apartamento1.jpg"></div>
-            <div class="thumbnail" onclick="openModal(['apartamento1.jpg', 'apartamento2.jpg'], 1)"><img src="apartamento2.jpg"></div>
-          </div>
-          <button class="btn">Comprar</button>
-        </div>
-      </div>
+            let history = JSON.parse(localStorage.getItem('produccion_history') || '[]');
+            history.unshift(data);
+            localStorage.setItem('produccion_history', JSON.stringify(history));
+            
+            renderHistory();
+            alert('Registro guardado exitosamente en el historial.');
+        }
 
-      <!-- RENTA -->
-      <div class="property renta">
-        <img src="renta1.jpg" alt="Apartamento en Alquiler" class="main-image" onclick="openModal(['renta1.jpg', 'renta2.jpg'])">
-        <div class="property-content">
-          <h2>Apartamento en Alquiler</h2>
-          <p><strong>Precio:</strong> $800 / mes</p>
-          <p>2 habitaciones, amueblado, buena ubicación.</p>
-          <div class="thumbnail-container">
-            <div class="thumbnail" onclick="openModal(['renta1.jpg', 'renta2.jpg'], 0)"><img src="renta1.jpg"></div>
-            <div class="thumbnail" onclick="openModal(['renta1.jpg', 'renta2.jpg'], 1)"><img src="renta2.jpg"></div>
-          </div>
-          <button class="btn">Alquilar</button>
-        </div>
-      </div>
+        function loadHistory() {
+            renderHistory();
+        }
 
-    </div>
-  </div>
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('produccion_history') || '[]');
+            const body = document.getElementById('history-body');
+            body.innerHTML = '';
 
-  <div id="modal" class="modal" onclick="closeModal()">
-    <img id="modal-img" src="" alt="Imagen ampliada">
-  </div>
+            if (history.length === 0) {
+                body.innerHTML = '<tr><td colspan="3" class="text-center text-gray-400 py-4">No hay registros guardados.</td></tr>';
+                return;
+            }
 
-  <script>
-    function openModal(images, index = 0) {
-      const modal = document.getElementById("modal");
-      const modalImg = document.getElementById("modal-img");
-      modal.style.display = "flex";
-      modalImg.src = images[index];
-    }
+            history.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="text-sm">${entry.timestamp}</td>
+                    <td class="text-xs text-gray-600">
+                        <b>Reproceso:</b> ${entry.totals.t1.join('/')} | 
+                        <b>Desperdicio:</b> ${entry.totals.t2.join('/')} | 
+                        <b>Harina:</b> ${entry.totals.t3.join('/')} | 
+                        <b>Molienda:</b> ${entry.totals.t4.join('/')}
+                    </td>
+                    <td class="text-center">
+                        <button onclick="deleteEntry(${entry.id})" class="text-red-500 hover:text-red-700 font-bold">Eliminar</button>
+                    </td>
+                `;
+                body.appendChild(row);
+            });
+        }
 
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
-    }
+        function deleteEntry(id) {
+            if(confirm('¿Eliminar este registro del historial?')) {
+                let history = JSON.parse(localStorage.getItem('produccion_history') || '[]');
+                history = history.filter(e => e.id !== id);
+                localStorage.setItem('produccion_history', JSON.stringify(history));
+                renderHistory();
+            }
+        }
 
-    function filterProperties() {
-      const selected = document.getElementById("property-type").value;
-      const all = document.querySelectorAll(".property");
-      all.forEach(el => {
-        el.style.display = selected === "todas" || el.classList.contains(selected) ? "block" : "none";
-      });
-    }
-  </script>
+        function clearCurrentData() {
+            if(confirm('¿Limpiar los datos de la tabla actual? El historial no se verá afectado.')) {
+                document.querySelectorAll('input').forEach(i => i.value = '');
+                document.querySelectorAll('.total-display').forEach(d => d.innerText = '0');
+            }
+        }
+
+        function downloadCSV() {
+            const history = JSON.parse(localStorage.getItem('produccion_history') || '[]');
+            if (history.length === 0) return alert('No hay datos para descargar');
+
+            let csv = 'Fecha/Hora,Total Reproceso 1,Total Reproceso 2,Acum Generacion 1,Acum Generacion 2,Acum Harina 1,Acum Harina 2,Total Molienda 1,Total Molienda 2\n';
+            
+            history.forEach(e => {
+                csv += `"${e.timestamp}",${e.totals.t1[0]},${e.totals.t1[1]},${e.totals.t2[0]},${e.totals.t2[1]},${e.totals.t3[0]},${e.totals.t3[1]},${e.totals.t4[0]},${e.totals.t4[1]}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "historial_produccion.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
+
+
